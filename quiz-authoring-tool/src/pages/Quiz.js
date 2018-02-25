@@ -16,11 +16,13 @@ this.updateQuestionValue=this.updateQuestionValue.bind(this)
 this.updateAnswerValue=this.updateAnswerValue.bind(this)
 this.renderRightPane=this.renderRightPane.bind(this)
 this.updateAddQuiz=this.updateAddQuiz.bind(this)
+this.triggerDelete=this.triggerDelete.bind(this)
 }
 componentWillMount(){
   this.setState({
     selectedQuestion:quizStructure[0],
-    quizStructure:quizStructure
+    quizStructure:quizStructure,
+    triggerFromDeleteButton:false
   })
 
 }
@@ -35,12 +37,14 @@ updateQuestionValue(number,textboxvalue){
       question.questionName=textboxvalue
   })
   this.setState({
-    quizStructure:quizStructure
+    quizStructure:quizStructure,
+    triggerFromDeleteButton:false
   })
 }
 renderRightPane(questionObj){
    this.setState({
-    selectedQuestion:questionObj
+    selectedQuestion:questionObj,
+    triggerFromDeleteButton:false
   }) 
 }
 updateAnswerValue(questionNumber,answerNumber,textboxvalue){
@@ -57,22 +61,42 @@ quizStructure.forEach(question=>{
 })
 
   this.setState({
-    quizStructure:quizStructure
+    quizStructure:quizStructure,
+    triggerFromDeleteButton:false
   })
 }
 updateAddQuiz(addQuiz){
-addQuiz.questionNumber=quizStructure.length+1;
+addQuiz.questionNumber=this.state.quizStructure.length+1;
 this.state.quizStructure.push(addQuiz)
 this.setState({
-  quizStructure:this.state.quizStructure
+  quizStructure:this.state.quizStructure,
+  triggerFromDeleteButton:false
 })
+}
+triggerDelete(deletedList){
+for(var i=0;i<deletedList.length;i++){
+  for(var j=0;j<this.state.quizStructure.length;j++){
+    if(this.state.quizStructure[j].questionNumber==deletedList[i]){
+      this.state.quizStructure.splice(j,1)
+    }
+  }
+}
+this.state.quizStructure.forEach((question,index)=>{
+    question.questionNumber=index+1
+})
+  this.setState({
+    quizStructure:this.state.quizStructure,
+    triggerFromDeleteButton:true,
+    selectedQuestion:this.state.quizStructure[0]
+  })
+  
 }
   render() {
     return (
     	<Grid>
       <Row className="show-grid" id="quizBorder">
         <Col xs={6} md={5} id="leftPane">
-        <LeftPane questions={this.state.quizStructure} renderRightPane={this.renderRightPane} updateAddQuiz={this.updateAddQuiz}/>
+        <LeftPane questions={this.state.quizStructure} renderRightPane={this.renderRightPane} updateAddQuiz={this.updateAddQuiz} triggerDelete={this.triggerDelete} triggerFromDeleteButton={this.state.triggerFromDeleteButton}/>
     </Col>
     <Col xs={12} md={7} id="rightPane">
     <RightPane selectedQuestion={this.state.selectedQuestion} updateQuestionValue={this.updateQuestionValue} updateAnswerValue={this.updateAnswerValue}/>
