@@ -137,8 +137,7 @@ saveImage(questionDetails){
   render() {
     return (
       <div>
-    	<Grid>
-      <Row className="show-grid" id="quizBorder">
+      <Row className="show-grid" id={(navigator.userAgent.match(/Android/i)||navigator.userAgent.match(/iPhone|iPad|iPod/i)) && "quizBorder"}>
         <div className="col-6" id="leftPane">
         <LeftPane questions={this.state.quizStructure} renderRightPane={this.renderRightPane} updateAddQuiz={this.updateAddQuiz} triggerDelete={this.triggerDelete} triggerFromDeleteButton={this.state.triggerFromDeleteButton}/>
     </div>
@@ -146,7 +145,6 @@ saveImage(questionDetails){
     <RightPane selectedQuestion={this.state.selectedQuestion} saveImage={this.saveImage} updateQuestionValue={this.updateQuestionValue} triggerDeleteOptions={this.triggerDeleteOptions} triggerFromDeleteButtonOptions={this.state.triggerFromDeleteButtonOptions} updateAddOption={this.updateAddOption} updateAnswerValue={this.updateAnswerValue}/>
     </div>
       </Row>
-      </Grid>
        </div>
     );
   }
