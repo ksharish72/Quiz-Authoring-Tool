@@ -136,16 +136,18 @@ saveImage(questionDetails){
 }
   render() {
     return (
+      <div>
     	<Grid>
       <Row className="show-grid" id="quizBorder">
-        <Col xs={6} md={5} id="leftPane">
+        <div className="col-6" id="leftPane">
         <LeftPane questions={this.state.quizStructure} renderRightPane={this.renderRightPane} updateAddQuiz={this.updateAddQuiz} triggerDelete={this.triggerDelete} triggerFromDeleteButton={this.state.triggerFromDeleteButton}/>
-    </Col>
-    <Col xs={12} md={7} id="rightPane">
+    </div>
+    <div className="col-6" id="rightPane">
     <RightPane selectedQuestion={this.state.selectedQuestion} saveImage={this.saveImage} updateQuestionValue={this.updateQuestionValue} triggerDeleteOptions={this.triggerDeleteOptions} triggerFromDeleteButtonOptions={this.state.triggerFromDeleteButtonOptions} updateAddOption={this.updateAddOption} updateAnswerValue={this.updateAnswerValue}/>
-    </Col>
+    </div>
       </Row>
       </Grid>
+       </div>
     );
   }
 }
