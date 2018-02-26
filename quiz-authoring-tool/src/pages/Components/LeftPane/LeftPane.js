@@ -27,6 +27,7 @@ class LeftPane extends Component {
 		var addQuiz={
       questionNumber:"",
      questionName:"New Question",
+     image:"",
      answerChoices:[{
       answerNumber:1,
       answerName:"Answer Choice 1"

@@ -17,11 +17,15 @@ this.updateAnswerValue=this.updateAnswerValue.bind(this)
 this.renderRightPane=this.renderRightPane.bind(this)
 this.updateAddQuiz=this.updateAddQuiz.bind(this)
 this.triggerDelete=this.triggerDelete.bind(this)
+this.updateAddOption=this.updateAddOption.bind(this)
+this.triggerDeleteOptions=this.triggerDeleteOptions.bind(this)
+this.saveImage=this.saveImage.bind(this)
 }
 componentWillMount(){
+  var quizStructureLocalStorage=JSON.parse(localStorage.getItem('updatedQuizStructure'))
   this.setState({
-    selectedQuestion:quizStructure[0],
-    quizStructure:quizStructure,
+    selectedQuestion:quizStructureLocalStorage!=null?quizStructureLocalStorage[0]: quizStructure[0],
+    quizStructure:quizStructureLocalStorage!=null?quizStructureLocalStorage:quizStructure,
     triggerFromDeleteButton:false
   })
 
@@ -29,15 +33,16 @@ componentWillMount(){
 componentDidMount(){
 	document.title="Quiz Authoring Tool"
   
-}
+}   
 updateQuestionValue(number,textboxvalue){
   console.log(quizStructure)
-  quizStructure.forEach(question=>{
+  this.state.quizStructure.forEach(question=>{
     if(question.questionNumber==number)
       question.questionName=textboxvalue
   })
+  localStorage.setItem('updatedQuizStructure',JSON.stringify(this.state.quizStructure))
   this.setState({
-    quizStructure:quizStructure,
+    quizStructure:this.state.quizStructure,
     triggerFromDeleteButton:false
   })
 }
@@ -50,7 +55,7 @@ renderRightPane(questionObj){
 updateAnswerValue(questionNumber,answerNumber,textboxvalue){
 console.log(textboxvalue)
 console.log(quizStructure)
-quizStructure.forEach(question=>{
+this.state.quizStructure.forEach(question=>{
   if(question.questionNumber==questionNumber){
   question.answerChoices.forEach(answer=>{
     if(answer.answerNumber==answerNumber)
@@ -59,15 +64,27 @@ quizStructure.forEach(question=>{
   }
 
 })
-
+  localStorage.setItem('updatedQuizStructure',JSON.stringify(this.state.quizStructure))
   this.setState({
-    quizStructure:quizStructure,
+    quizStructure:this.state.quizStructure,
     triggerFromDeleteButton:false
   })
 }
 updateAddQuiz(addQuiz){
 addQuiz.questionNumber=this.state.quizStructure.length+1;
 this.state.quizStructure.push(addQuiz)
+  localStorage.setItem('updatedQuizStructure',JSON.stringify(this.state.quizStructure))
+this.setState({
+  quizStructure:this.state.quizStructure,
+  triggerFromDeleteButton:false
+})
+}
+updateAddOption(addOption,questionNumber){
+  var choiceNumber=this.state.quizStructure.find(q=>q.questionNumber==questionNumber).answerChoices.length+1
+  addOption.answerNumber=this.state.quizStructure.find(q=>q.questionNumber==questionNumber).answerChoices.length+1
+  addOption.answerName="Answer Choice "+ choiceNumber
+this.state.quizStructure.find(q=>q.questionNumber==questionNumber).answerChoices.push(addOption)
+  localStorage.setItem('updatedQuizStructure',JSON.stringify(this.state.quizStructure))
 this.setState({
   quizStructure:this.state.quizStructure,
   triggerFromDeleteButton:false
@@ -84,12 +101,38 @@ for(var i=0;i<deletedList.length;i++){
 this.state.quizStructure.forEach((question,index)=>{
     question.questionNumber=index+1
 })
+  localStorage.setItem('updatedQuizStructure',JSON.stringify(this.state.quizStructure))
   this.setState({
     quizStructure:this.state.quizStructure,
     triggerFromDeleteButton:true,
     selectedQuestion:this.state.quizStructure[0]
   })
   
+}
+triggerDeleteOptions(deletedListOptions,questionDetails){
+var answerChoices=this.state.quizStructure.find(q=>q.questionNumber==questionDetails.questionNumber).answerChoices
+  for(var i=0;i<deletedListOptions.length;i++){
+  for(var j=0;j< answerChoices.length;j++){
+    if(  answerChoices[j].answerNumber==deletedListOptions[i]){
+      answerChoices.splice(j,1)
+    }
+  }
+}
+answerChoices.forEach((answer,index)=>{
+    answer.answerNumber=index+1
+})
+  localStorage.setItem('updatedQuizStructure',JSON.stringify(this.state.quizStructure))
+ this.setState({
+    quizStructure:this.state.quizStructure,
+    triggerFromDeleteButtonOptions:true
+  })
+}
+saveImage(questionDetails){
+  this.state.quizStructure.find(q=>q.questionNumber==questionDetails.questionNumber).image=questionDetails.image;
+    localStorage.setItem('updatedQuizStructure',JSON.stringify(this.state.quizStructure))
+  this.setState({
+    quizStructure:this.state.quizStructure
+  })
 }
   render() {
     return (
@@ -99,7 +142,7 @@ this.state.quizStructure.forEach((question,index)=>{
         <LeftPane questions={this.state.quizStructure} renderRightPane={this.renderRightPane} updateAddQuiz={this.updateAddQuiz} triggerDelete={this.triggerDelete} triggerFromDeleteButton={this.state.triggerFromDeleteButton}/>
     </Col>
     <Col xs={12} md={7} id="rightPane">
-    <RightPane selectedQuestion={this.state.selectedQuestion} updateQuestionValue={this.updateQuestionValue} updateAnswerValue={this.updateAnswerValue}/>
+    <RightPane selectedQuestion={this.state.selectedQuestion} saveImage={this.saveImage} updateQuestionValue={this.updateQuestionValue} triggerDeleteOptions={this.triggerDeleteOptions} triggerFromDeleteButtonOptions={this.state.triggerFromDeleteButtonOptions} updateAddOption={this.updateAddOption} updateAnswerValue={this.updateAnswerValue}/>
     </Col>
       </Row>
       </Grid>

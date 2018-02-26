@@ -4,8 +4,20 @@ import { Row, Col,Grid,Button} from "react-bootstrap";
 import TextBox from './TextBox';
 
 
-
+let deletedListOptions=[]
 class RightPane extends Component {
+	constructor(){
+		super()
+		   this.state={
+      deleteModeOptions:false,
+      imagePreviewUrl:null
+    }
+		this.handleAddOption=this.handleAddOption.bind(this)
+		this.handleDeleteModeOptions=this.handleDeleteModeOptions.bind(this)
+		this.handleCancelDeleteOptions=this.handleCancelDeleteOptions.bind(this)
+		this.handleDeleteOptions=this.handleDeleteOptions.bind(this)
+		this.readURL=this.readURL.bind(this)
+	}
 	componentWillMount(){
   	  	var {selectedQuestion}=this.props;
 		this.setState({
@@ -13,10 +25,62 @@ class RightPane extends Component {
 		})
 	}
 	componentWillReceiveProps(nextProps){
+		if(nextProps.triggerFromDeleteButtonOptions){
+			  deletedListOptions=[]
+    this.setState({
+      deleteModeOptions:false
+    })  
+		}
 			this.setState({
 				questionDetails:nextProps.selectedQuestion
 			})
 	}
+	componentDidMount(){
+		deletedListOptions=[]
+	}
+	handleAddOption(){
+		var addAnswerOption={
+        answerNumber:"",
+      answerName:""
+    
+     }
+			this.props.updateAddOption(addAnswerOption,this.state.questionDetails.questionNumber)
+	}
+	handleDeleteModeOptions(){
+		  this.setState({
+    deleteModeOptions:true
+  })
+	}
+	 handleDeleteOptions(){
+    this.props.triggerDeleteOptions(deletedListOptions,this.state.questionDetails)
+  }
+	handleCancelDeleteOptions(){
+		deletedListOptions=[]
+		this.setState({
+			deleteModeOptions:false
+		})
+	}
+	 handleCheckBoxClickOptions(event){
+      deletedListOptions.push(event.target.value)
+      console.log(event.target.value)
+    console.log('checkboxcick')
+  }
+  readURL(e){
+    e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    reader.onloadend = () => {
+    	this.state.questionDetails.image=reader.result
+      this.setState({
+        questionDetails: this.state.questionDetails
+      });
+    }
+
+    reader.readAsDataURL(file)  
+    	this.props.saveImage(this.state.questionDetails)
+}
   render() {
     return (
 <div>
@@ -39,34 +103,55 @@ class RightPane extends Component {
 					</Row>
 					<Row clasName="show-grid" id="image">
 					<Col md={9}>
-					<img src="https://d134jvmqfdbkyi.cloudfront.net/upload/images/questions/katniss.jpg" alt="" id="IMG_23" />
+
+					<img style={{width:'inherit',height:'inherit'}} src={this.state.questionDetails.image} alt="" id="IMG_23" />
 					</Col>
 					<Col md={3}>
-  <Button bsStyle="primary">ADD IMAGE</Button>
+					<div>
+  <label for="files" id="addimage" className="btn">ADD IMAGE</label>
+  <input id="files" accept="image/*" onChange={this.readURL} style={{visibility:'hidden'}} type="file"/>
+</div>
 					</Col>
 					</Row>
 					<div id="options">
 				{this.state.questionDetails.answerChoices.map(answer=>{
 			return (<Row className="show-grid">
-					<Col md={3} style={{marginTop:10}}>
+				<Col md={1}>
+					{this.state.deleteModeOptions && <label class="checkcontaineroptions">
+ 
+         <input type="checkbox" value={answer.answerNumber} onChange={this.handleCheckBoxClickOptions} id="checkcheckboxoptions"/>
+           <span class="checkcheckmarkoptions"></span>
+           </label>
+  }
+				</Col>
+					<Col md={2} style={{marginTop:10}}>
+				
 					<h5>Option {answer.answerNumber}</h5>
 					</Col>
-					<Col md={9}>
+					<Col md={8}>
 					<TextBox answerChoices={answer} questionNumber={this.state.questionDetails.questionNumber} updateAnswerValue={this.props.updateAnswerValue} />
 					</Col>
 					</Row>
 					);		
 				})}
 			</div>
+			  {this.state.deleteModeOptions ?    <Row clasName="show-grid" style={{    marginTop: 20}}>
+          <Col md={4}>
+  <Button onClick={this.handleDeleteOptions} bsStyle="danger">DELETE</Button>
+          </Col>
+          <Col md={1}>
+  <Button onClick={this.handleCancelDeleteOptions} bsStyle="primary">CANCEL</Button>
+          </Col>
+          </Row>:
 			   			<Row clasName="show-grid" id="adddeletebuttons">
 					<Col md={4}>
-  <Button bsStyle="primary">ADD</Button>
+  <Button bsStyle="primary" onClick={this.handleAddOption}>ADD</Button>
 					</Col>
 					<Col md={1}>
-  <Button bsStyle="primary">DELETE</Button>
+  <Button bsStyle="primary" onClick={this.handleDeleteModeOptions}>DELETE</Button>
 					</Col>
 					</Row>
-			
+			}
 			</div>
 		</form>
 	</div>

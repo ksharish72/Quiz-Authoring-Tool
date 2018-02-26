@@ -1,6 +1,7 @@
 const quizStructure=[{
       questionNumber:1,
      questionName:"What is the captial of India?",
+     image:"",
      answerChoices:[{
       answerNumber:1,
       answerName:"New Delhi"
@@ -16,6 +17,7 @@ const quizStructure=[{
     },{
       questionNumber:2,
      questionName:"What is the captial of USA?",
+     image:"",
      answerChoices:[{
       answerNumber:1,
       answerName:"California"
