@@ -127,9 +127,11 @@ answerChoices.forEach((answer,index)=>{
     triggerFromDeleteButtonOptions:true
   })
 }
+
 saveImage(questionDetails){
   this.state.quizStructure.find(q=>q.questionNumber==questionDetails.questionNumber).image=questionDetails.image;
     localStorage.setItem('updatedQuizStructure',JSON.stringify(this.state.quizStructure))
+
   this.setState({
     quizStructure:this.state.quizStructure
   })

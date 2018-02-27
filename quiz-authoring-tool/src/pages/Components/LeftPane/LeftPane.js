@@ -72,7 +72,7 @@ class LeftPane extends Component {
   	var {questions}=this.props;
    return (
     <div>
-   	<h3>{this.state.deleteMode ? "Select Questions to be Deleted" : "Select your Questions"}</h3>
+   	<h3 id="headingLeft">{this.state.deleteMode ? "Select Questions to be Deleted" : "Select your Questions"}</h3>
    	<div className="tab">
 {questions!=null && questions.map(questionObj=>{
 	return(

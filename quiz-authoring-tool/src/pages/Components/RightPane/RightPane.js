@@ -84,7 +84,7 @@ class RightPane extends Component {
   render() {
     return (
 <div>
-	<h3>Design Question {this.state.questionDetails.questionNumber}</h3>
+	<h3 id="headingRight">Design Question {this.state.questionDetails.questionNumber}</h3>
 
 	
 	

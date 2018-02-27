@@ -1,5 +1,9 @@
+@import url('https://fonts.googleapis.com/css?family=Oswald');
+#headingLeft{
+    font-family: oswald;
+    color: indianred;
+}
 #questionName{
-	      font-family: oswald;
     font-size: 20px;
         margin-left: 50px;
 }

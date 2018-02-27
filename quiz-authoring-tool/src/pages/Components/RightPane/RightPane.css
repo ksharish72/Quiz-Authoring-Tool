@@ -1,6 +1,10 @@
 #rightPane{
     float: left;
 }
+#headingRight{
+	font-family: oswald;
+    color: indianred;
+}
 #FIELDSET_18{
 	margin-top: 30px;
 }
