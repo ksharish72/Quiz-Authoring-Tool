@@ -88,20 +88,20 @@ class LeftPane extends Component {
    	})}
    	</div>
     {this.state.deleteMode ?    <Row clasName="show-grid" style={{    marginTop: 20}}>
-          <Col md={4}>
+          <div className="col-6">
   <Button onClick={this.handleDelete} bsStyle="danger">DELETE</Button>
-          </Col>
-          <Col md={1}>
+          </div>
+          <div className="col-6">
   <Button onClick={this.handleCancelDelete} bsStyle="primary">CANCEL</Button>
-          </Col>
+          </div>
           </Row>:
               <Row clasName="show-grid" style={{    marginTop: 20}}>
-          <Col md={4}>
+          <div className="col-6">
   <Button onClick={this.handleAdd} bsStyle="primary">ADD</Button>
-          </Col>
-          <Col md={1}>
+          </div>
+          <div className="col-6">
   <Button onClick={this.handleDeleteMode} bsStyle="primary">DELETE</Button>
-          </Col>
+          </div>
           </Row>
  
         }

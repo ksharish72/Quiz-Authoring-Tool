@@ -136,20 +136,20 @@ class RightPane extends Component {
 				})}
 			</div>
 			  {this.state.deleteModeOptions ?    <Row clasName="show-grid" style={{    marginTop: 20}}>
-          <Col md={4}>
+          <div className="col-6">
   <Button onClick={this.handleDeleteOptions} bsStyle="danger">DELETE</Button>
-          </Col>
-          <Col md={1}>
+          </div>
+          <div className="col-6">
   <Button onClick={this.handleCancelDeleteOptions} bsStyle="primary">CANCEL</Button>
-          </Col>
+          </div>
           </Row>:
 			   			<Row clasName="show-grid" id="adddeletebuttons">
-					<Col md={4}>
+          <div className="col-6">
   <Button bsStyle="primary" onClick={this.handleAddOption}>ADD</Button>
-					</Col>
-					<Col md={1}>
+					</div>
+          <div className="col-6">
   <Button bsStyle="primary" onClick={this.handleDeleteModeOptions}>DELETE</Button>
-					</Col>
+					</div>
 					</Row>
 			}
 			</div>
